@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "##################### Description of the file :\n\n# Query the data from the WRDS Database.\n\n##################### Clear environment:\nrm(list=ls())\n##################### Setup :\nlibrary(RPostgres)\nlibrary(dplyr)\nsetwd(\"C:/Users/Vida/Desktop/Th?se/Corporate Default Prediciton/_CODE\")\n####################\n\nwrds <- dbConnect(Postgres(),\n                  host='wrds-pgdata.wharton.upenn.edu',\n                  port=9737,\n                  dbname='wrds',\n                  sslmode='require',\n                  user='bijansn',\n                  password='PasswordForWRDS123')\n\n\nres <- dbSendQuery(wrds, \"select gvkey, splticrm, datadate from adsprate\")\ndata <- dbFetch(res, n=-1)\ndbClearResult(res)\n\nsave(data, file = \"C:/Users/Vida/Desktop/Th?se/Corporate Default Prediciton/_DATABASE/[RAW] Compagny_Default.RData\")\n",
+    "created" : 1602341706273.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2354419813",
+    "id" : "CF035445",
+    "lastKnownWriteTime" : 1602288316,
+    "last_content_update" : 1602288316,
+    "path" : "C:/Users/Vida/Desktop/Thèse/Corporate Default Prediciton/_CODE/1. Query.R",
+    "project_path" : "1. Query.R",
+    "properties" : {
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

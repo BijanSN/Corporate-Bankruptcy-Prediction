@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "##########################\n\n#Exploratory data analysis\n\n##########################\nrm(list=ls())\n############\nlibrary(ggplot2)\nlibrary(ggthemes)\nlibrary(dplyr)\nlibrary(gganimate)\nlibrary(lattice)\n\n\n#######################\n#Local functions :\n\nsurvival_time_fc= function(latest_date,earliest_date){\n  ld=  as.POSIXlt(latest_date)\n  ed = as.POSIXlt(earliest_date)\n  12 * (ld$year - ed$year) + (ld$mon - ed$mon)\n}\n\n#######################\nload(\"C:/Users/Vida/Desktop/Th?se/Corporate Default Prediciton/_DATABASE/[Clean] Compagny_Default.RDATA\")\n#######################\n\n# Companies (all time):\n\nnumFirms= clean_data %>% \n          count(gvkey) \n#5972 firms with uninterrupted monthly ratings\n\n\n############ Determine if the compagny defaulted (at least) once or not. and if so how many times.\n\nNumDefaultedKey= clean_data %>%\n                 filter(splticrm ==\"D\") %>%\n                 # Number of firms who got a rating 'D' at least once: \n                 count(gvkey) #710 firms got D (multiple times)\n\n\n########### Create a new column, =1 if the compagny defaulted (Default_bool)\n\n\nNumDefaultedKey= clean_data %>%\n                 filter(splticrm ==\"D\") %>%\n                 group_by(gvkey) %>%\n                 mutate(Default_bool=as.factor('1'))\n\n########## merge with clean_data : \n\nNewData= right_join(clean_data,NumDefaultedKey , by = c(\"gvkey\" = \"gvkey\"))\n\n\n\n#default rate of the data set:\n(nrow(NumDefaultedKey)/nrow(numFirms))*100 # 11.89 % ......\n\n\n#PLOTS\n\nclean_data$splticrm = factor(clean_data$splticrm, levels=c(\"AAA\",\"AA+\",\"AA\", \"AA-\",\"A+\",\"A\",\"A-\",\"BBB+\",\"BBB\",\"BBB-\", \"BB+\",\"BB\",\"BB-\",\"B+\",\"B-\",\"B\",\"CCC+\",\"CCC\",\"CCC-\",\"CC\",\"C\",\"D\",\"N.M.\",\"SD\",\"Suspended\"))\n\nggplot(clean_data, aes(clean_data$splticrm )) + # colors : fill=clean_data$splticrm\n  geom_bar() +\n  theme_bw() \n\n# +\n# transition_states(\n#   clean_data$datadate,\n#   transition_length = 2,\n#   state_length = 1\n# ) +\n# ease_aes('sine-in-out')\n#anim_save(\"animated-barplot-transition.gif\")\n\n\n##############\n\nggplot(clean_data, aes(clean_data$splticrm )) +\n  geom_bar() +\n  theme_bw() \n\n\n\n\n\n\nclean_data = clean_data %>%\n  group_by(gvkey) %>% \n  filter(datadate==max(datadate))\n\n\n\n\n\n\nlatestRatings= clean_data %>%\n  group_by(gvkey) %>% \n  filter(datadate==max(datadate))\n\nlatestRatings %>%\n  ggplot(aes(splticrm))+ #, fill=splticrm\n  geom_bar() +\n  theme_bw() \n\n\n\n\n\n\n#Survival time in  months :\n\nSurvivalTime= clean_data %>% \n  group_by(gvkey) %>% \n  mutate(Survival_Time=survival_time_fc(max(datadate),min(datadate)))%>% \n  #  the most recent year shown only\n  filter(datadate==max(datadate))\n\n",
+    "created" : 1602341716532.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "4169159885",
+    "id" : "AC7ABE15",
+    "lastKnownWriteTime" : 1602292701,
+    "last_content_update" : 1602292701,
+    "path" : "C:/Users/Vida/Desktop/Thèse/Corporate Default Prediciton/_CODE/3. EDA.R",
+    "project_path" : "3. EDA.R",
+    "properties" : {
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

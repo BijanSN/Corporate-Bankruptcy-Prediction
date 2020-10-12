@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "########################\n\n#Step 2 : Preprocessing\n\n########################\n\nrm(list=ls())\n################## Setup :\nlibrary(dplyr)\n################### Loading the data :\n\nload(\"C:/Users/Vida/Desktop/Th?se/Corporate Default Prediciton/_DATABASE/[RAW] Compagny_Default.RData\")\n\n################### Preprocessing : \n\nclean_data=na.omit(data)\nclean_data=as_tibble(clean_data)\n\nclean_data= clean_data  %>%\n  mutate(datadate=as.Date(datadate))\n\nsave(clean_data, file = \"C:/Users/Vida/Desktop/Th?se/Corporate Default Prediciton/_DATABASE/[Clean] Compagny_Default.RData\")\n\n#remove N/As (next : look out for outliers !)",
+    "created" : 1602341711885.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3597317974",
+    "id" : "3FAB8380",
+    "lastKnownWriteTime" : 1602288753,
+    "last_content_update" : 1602288753,
+    "path" : "C:/Users/Vida/Desktop/Thèse/Corporate Default Prediciton/_CODE/2. Pre_processing.R",
+    "project_path" : "2. Pre_processing.R",
+    "properties" : {
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
