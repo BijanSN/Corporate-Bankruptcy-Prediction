@@ -5,9 +5,12 @@
 ################## Setup :
 library(dplyr)
 library(magrittr)
+library(tibble)
 ################### Loading the data :
 load("./_DATABASE/[RAW] Compagny_Default.RData")
-################### Preprocessing : 
+
+##----------------- Rating dataset -----------------------
+
 
 clean_data=na.omit(data)                                # remove N/As
 clean_data=tibble(clean_data)                           # convert into a "modern" dataframe
@@ -25,10 +28,36 @@ clean_data %<>%                                                                 
             rename(ratings=splticrm) %>%                                              #rename to something more clear
             droplevels()                                                              #drop unused factors
 
-
 clean_data %<>% 
             group_by(gvkey) %>%
-            mutate(defaultbool= ifelse(ratings=='D',1,0))  %>%                     # create a new column "default_bool" =1 if the compagny defaulted
-            mutate(defaultbool= max(defaultbool))
+            mutate(defaultbool= ifelse(ratings=='D',1,0)) # %>%                     # create a new column "default_bool" =1 if the compagny defaulted
+           # mutate(defaultbool= max(defaultbool))
 
 save(clean_data, file = "./_DATABASE/[Clean] Compagny_Default.RData")
+
+
+#-------------- Compagny_Financials dataset : --------------#
+# Financial Ratios Firm Level by WRDS
+
+numFirms= clean_data %>% 
+          count(gvkey)
+
+
+write.table(numFirms$gvkey,"./_DATABASE/Compagny_gvkey.txt", sep = "/n",row.names = F,
+                                                             col.names = F, quote = F) 
+
+#(Manual) web query using "Compagny_gvkey.txt" => Creates : "[RAW] Compagny_Financials.csv"
+firmfin=read.csv("./_DATABASE/[RAW] Compagny_Financials.csv")
+Var_desc=read.table("./_DATABASE/Variables_Description.txt", sep="\t")
+
+firmfin %<>%
+        mutate(gvkey=factor(gvkey))#convert ratings into ordered factors
+
+Compiled_data=left_join(clean_data,firmfin, by = "gvkey")
+rm(clean_data)
+rm(data)
+rm(firmfin)
+rm(numFirms)
+
+glm()
+

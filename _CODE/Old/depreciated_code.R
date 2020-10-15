@@ -61,3 +61,33 @@ ggplot(first_data, aes(first_data$ratings,fill=first_data$defaultbool)) +
   theme_bw() 
 
 
+
+
+linktable2=read.csv("./_DATABASE/Corporate_Data.csv")
+
+numfirms2=linktable2 %>%
+  count(GVKEY) 
+#2632 firms 
+
+
+
+
+
+
+
+linktable=read.csv("./_DATABASE/compagny_ID.csv")
+linktable$gvkey
+
+
+
+
+
+
+z= numfirms2$GVKEY %in% NumDefaultedKey$gvkey
+table(z)
+#100 
+
+
+
+
+

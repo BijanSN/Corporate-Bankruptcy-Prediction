@@ -31,6 +31,12 @@ Default_rate= 710/5972 #0.1189 => 11.82%
 
 #time frame = [1981-2017]
 
+
+# Number of companies (all time) and number of occurences :
+numFirms= clean_data %>% 
+  count(gvkey) 
+
+
 ################################
 ####################
 ########## Ratings : 
@@ -66,11 +72,6 @@ ggplot(first_data, aes(first_data$ratings ))+
 
 #####################
 ##########Companies :
-
-# Companies (all time) and number of occurences :
-numFirms= clean_data %>% 
-          count(gvkey) 
-
 
 ############ Determine if the compagny defaulted (at least) once or not. and if so how many times.
 
@@ -136,34 +137,9 @@ test =Updated_data %>%
 
 
 
-# defaulted_fc= function(rating){
-#   
-# if (rating) =='D'{
-#   rating=1
-#   else
-#       ratings=0
-#     end}
-#     
-#   
-#   
-# }
-
-
-
 clean_data %>%
   group_by(gvkey) %>%
   add_column(default_bool2= defaulted_fc(.$splticrm))
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -183,10 +159,6 @@ clean_data %>%
   newstats %>%
     group_by(year) %>%
     summarize(model_id = paste0(model_id, collapse = ","), name=paste0(name, collapse = ",")) 
-
-
-
-
 
 
 

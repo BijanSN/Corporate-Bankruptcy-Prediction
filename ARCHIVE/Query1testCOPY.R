@@ -11,6 +11,8 @@ wrds <- dbConnect(Postgres(),
                   password='PasswordForWRDS123')
 
 
+
+
 ######## see all the available libraries : 
 
 res <- dbSendQuery(wrds, "select distinct table_schema
@@ -24,7 +26,7 @@ data
 View(data)
 
 
-### imagine we want : crsp
+### we want : crsp
 
 
 ######### see the datasets :
@@ -40,6 +42,9 @@ View(data)
 ######## we want : comphead  (link gvkey and name)
 
 
+
+
+
 res <- dbSendQuery(wrds, "select column_name
                    from information_schema.columns
                    where table_schema='crsp'
@@ -48,13 +53,73 @@ res <- dbSendQuery(wrds, "select column_name
 data <- dbFetch(res, n=-1)
 dbClearResult(res)
 data
+View(data)
+
+############  Query 2 :
+
+
+
+res <- dbSendQuery(wrds, "SELECT * FROM comphead WHERE gvkey IN firmsID")
+data <- dbFetch(res, n=-1) # take all from selected
+dbClearResult(res)
+data
+
+clean_data= na.omit(data)
+#View(clean_data)
+
+
+
+firmsID=readLines("Compagny_gvkey.txt")
+firmsID= paste(firmsID,collapse="\n")
+
+
+
+
+
+res <- dbSendQuery(wrds, "select column_name
+                   from information_schema.columns
+                   where table_schema='crsp'
+                   and table_name='ccmxpf_linktable'
+                   order by column_name")
+data <- dbFetch(res, n=-1)
+dbClearResult(res)
+data
+
+
+
+
+
+
+
+
+
+############  Query 2 :
+
+res <- dbSendQuery(wrds, "select * from ccmxpf_linktable")
+data <- dbFetch(res, n=-1) # take all from selected
+dbClearResult(res)
+data
+
+clean_data= na.omit(data)
+#View(clean_data)
+
+
+
+
+
+
+
+
+
+
+
 
 
 # we want : conml (name of the compagny!),gvkey (the link) , gsector,sic 
 
 
 ############
-
+ccmlinktable 
 
 ############  Query 1 :
 
@@ -157,6 +222,68 @@ data
 View(data)
    
    
+
+
+
+
+
+
+
+#-------------------------fundamentals : 
+
+
+
+
+######## see all the available libraries : 
+
+res <- dbSendQuery(wrds, "select distinct table_schema
+                   from information_schema.tables
+                   where table_type ='VIEW'
+                   or table_type ='FOREIGN TABLE'
+                   order by table_schema")
+data <- dbFetch(res, n=-1)
+dbClearResult(res)
+data
+View(data)
+
+
+### we want : wrdsapps
+
+
+######### see the datasets :
+
+res <- dbSendQuery(wrds, "select distinct table_name
+                   from information_schema.columns
+                   where table_schema='wrdsapps'
+                   order by table_name")
+data <- dbFetch(res, n=-1)
+dbClearResult(res)
+View(data)
+
+######## we want : comphead  (link gvkey and name)
+
+
+
+
+
+res <- dbSendQuery(wrds, "select column_name
+                   from information_schema.columns
+                   where table_schema='wrdsapps'
+                   and table_name='firm_ratio'
+                   order by column_name")
+data <- dbFetch(res, n=-1)
+dbClearResult(res)
+data
+View(data)
+
+
+
+
+
+
+
+
+
 
 
 save.image()

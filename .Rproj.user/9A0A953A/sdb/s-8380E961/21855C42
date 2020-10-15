@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "########################\n#Step 2 : Preprocessing\n########################\n#rm(list=ls())\n################## Setup :\nlibrary(dplyr)\nlibrary(magrittr)\nlibrary(tibble)\n################### Loading the data :\nload(\"./_DATABASE/[RAW] Compagny_Default.RData\")\n\n##----------------- Rating dataset -----------------------\n\n\nclean_data=na.omit(data)                                # remove N/As\nclean_data=tibble(clean_data)                           # convert into a \"modern\" dataframe\n\n# str(clean_data) # we need to convert type\n\nclean_data %<>%                                                                       #apply Right-Hand-Side functions and assigns to L.H.S.\n            filter(!splticrm %in% c(\"N.M.\",\"SD\",\"Suspended\")) %>%                     #remove unusable ratings\n            mutate(datadate=as.Date(.$datadate)) %>%                                  #from numeric to date type\n            mutate(splticrm= factor(.$splticrm,levels=c(\"AAA\",\"AA+\",\"AA\", \"AA-\",\n                                              \"A+\",\"A\",\"A-\",\"BBB+\",\"BBB\",\n                                              \"BBB-\", \"BB+\",\"BB\",\"BB-\",\n                                              \"B+\",\"B-\",\"B\",\"CCC+\",\"CCC\",\n                                              \"CCC-\",\"CC\",\"C\",\"D\"))) %>%              #convert ratings into ordered factors\n            rename(ratings=splticrm) %>%                                              #rename to something more clear\n            droplevels()                                                              #drop unused factors\n\nclean_data %<>% \n            group_by(gvkey) %>%\n            mutate(defaultbool= ifelse(ratings=='D',1,0)) # %>%                     # create a new column \"default_bool\" =1 if the compagny defaulted\n           # mutate(defaultbool= max(defaultbool))\n\nsave(clean_data, file = \"./_DATABASE/[Clean] Compagny_Default.RData\")\n\n\n#-------------- Compagny_Financials dataset : --------------#\n# Financial Ratios Firm Level by WRDS\n\nnumFirms= clean_data %>% \n          count(gvkey)\n\n\nwrite.table(numFirms$gvkey,\"./_DATABASE/Compagny_gvkey.txt\", sep = \"/n\",row.names = F,\n                                                             col.names = F, quote = F) \n\n#(Manual) web query using \"Compagny_gvkey.txt\" => Creates : \"[RAW] Compagny_Financials.csv\"\nfirmfin=read.csv(\"./_DATABASE/[RAW] Compagny_Financials.csv\")\nVar_desc=read.table(\"./_DATABASE/Variables_Description.txt\", sep=\"\\t\")\n\nfirmfin %<>%\n        mutate(gvkey=factor(gvkey))#convert ratings into ordered factors\n\nCompiled_data=left_join(clean_data,firmfin, by = \"gvkey\")\nrm(clean_data)\nrm(data)\nrm(firmfin)\nrm(numFirms)\n\nglm()\n\n",
+    "created" : 1602350778785.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "4018273276",
+    "id" : "21855C42",
+    "lastKnownWriteTime" : 1602601021,
+    "last_content_update" : 1602601021671,
+    "path" : "C:/Users/Vida/Desktop/Thèse/Corporate Default Prediciton/_CODE/2. Pre_processing.R",
+    "project_path" : "_CODE/2. Pre_processing.R",
+    "properties" : {
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
