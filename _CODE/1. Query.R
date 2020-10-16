@@ -3,7 +3,7 @@
 ##################### Clear environment:
 #rm(list=ls())
 ##################### Setup :
-library(RPostgres)
+library(RPostgres) #doesn't work on the cloud
 library(dplyr)
 
 #setwd("C:/Users/Vida/Desktop/Th?se/Corporate Default Prediciton/")
