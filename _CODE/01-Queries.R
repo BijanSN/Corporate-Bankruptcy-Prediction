@@ -13,31 +13,17 @@ conn <- nuvolos::get_connection()
 
 #------------------ Queries ------------------------
 
-#try to change FUNDQ with balencesheet + income data to see if there's more 
-
-#--------Financial dataset (quaterly):
-# 
-# financial_data <- dbGetQuery(conn,"SELECT GVKEY,DATADATE,FYEARQ,FQTR,ACTQ,AOQ,ATQ,CHEQ,COGSQ,CURRTRQ,CURNCDQ,CURUSCNQ,
-#                                           DVPSPQ,DPY,EPSPXQ,INVTQ ,LCTQ ,LTQ ,NIQ ,OIADPQ ,PIQ ,PPENTQ ,REQ,REVTQ,
-#                                           SALEQ, WCAPQ, XOPRQ, CEQQ,PRCCQ,CSHOQ,CHQ,UINVQ
-#                                    FROM \"FUNDQ\"")
-# 
-# save(financial_data, file= "./_DATABASE/[RAW] Financial_Data.RData")
-# rm(financial_data) # for memory purposes
-# 
-
-
 #--------Financial dataset (annualy):
 
-annual_data <- dbGetQuery(conn,"SELECT GVKEY,DATADATE,FYEAR,AT,ACT,AO,CAPX,CH,CHE,COGS,CSHO,CURRTR,CURNCD,
-                                          DVPSP_C,DP,EPSPX,INVT,LCT,LT,NI,OIBDP,OIADP,PI,PPENT,RE,REVT,
-                                          SALE, WCAP,XOPR,CEQ,PRCC_C,IBC,XINT,DLC,DVT,EBIT,EBITDA,BKVLPS,DLTT,XRD,SICH,SEQ,DVP,DVC,PRSTKC,IB,ICAPT
-                                   FROM \"FUNDA\"")
+annual_data <- dbGetQuery(conn,"SELECT GVKEY,DATADATE,FYEAR,AT,ACT,AO,CAPX,CHE,COGS,CSHO,CURRTR,
+                                          DP,EPSPX,INVT,LCT,LT,NI,OIBDP,OIADP,PI,PPENT,RE,REVT,
+                                          SALE, WCAP,XOPR,CEQ,PRCC_C,IBC,XINT,DLC,DVT,EBIT,EBITDA,BKVLPS,DLTT,SEQ,DVP,DVC,PRSTKC,IB,ICAPT
+                                   FROM \"FUNDA\"") #CH
 
 save(annual_data, file= "./_DATABASE/[RAW] Annual_Data.RData")
+rm(annual_data)
 
-
-#-------- Financial dataset footnotes(annual): 
+#-------- Financial dataset footnotes (annual): 
 
 # Footnotes_Annual_Data <- dbGetQuery(conn,"SELECT GVKEY,DATADATE,FYEAR,AT_FN
 #                           FROM \"FUNDA_FNCD\"")
